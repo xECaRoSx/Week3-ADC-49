@@ -53,9 +53,8 @@ typedef struct {
 } ADCStructure;
 
 ADCStructure ADCChannel[3] = {0};
-float ADCOutputConverted = 0;
 int ADCMode = 0;
-
+float ADCOutputConverted = 0;
 GPIO_PinState StateSW[2];
 uint32_t ButtonTimeStamp = 0;
 
@@ -125,7 +124,7 @@ while (1)
 	{
 		ButtonTimeStamp = HAL_GetTick();
 		StateSW[0] = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
-		if(StateSW[1] == 1 && StateSW[0] == 0)
+		if(StateSW[1] == GPIO_PIN_SET && StateSW[0] == GPIO_PIN_RESET)
 		{
 			if(ADCMode == 0)
 			{
@@ -141,11 +140,11 @@ while (1)
 /* =================================================================== Mode Function ==================================================================== */
 	if(ADCMode == 0)
 	{
-		ADCSOutputConverted = (3300 * ADCChannel[0].data) / 4096 ;
+		ADCOutputConverted = (3300 * ADCChannel[0].data) / 4096 ;
 	}
 	else
 	{
-		ADCSOutputConverted = ((((3300 * ADCChannel[2].data) / 4096) - 760) / 2.5) + 25 ;
+		ADCOutputConverted = ((((3300 * ADCChannel[2].data) / 4096) - 760) / 2.5) + 25 ;
 	}
 /* ======================================================================= Finish ======================================================================= */
 }
